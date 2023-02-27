@@ -1,33 +1,28 @@
-let moverA;
-let moverB;
+let movers = [];
+let mu = 0.1
 
 function setup() {
     createCanvas(800, 800);
-    moverA = new Mover(400, 400, 4)
-    moverB = new Mover(200, 400, 2)
+    for (let i = 0; i < 10; i++) {
+        movers[i] = new Mover(random(width), random(height), random(1, 8));
+    }
 }
 
 function draw() {
     background(0);
+    for (let mover of movers) {
+        if (mouseIsPressed) {
+            let wind = createVector(0.1, 0);
+            mover.applyForce(wind);
+        }
 
-    if (mouseIsPressed) {
-        let wind = createVector(0.1, 0);
-        moverA.applyForce(wind);
-        moverB.applyForce(wind);
+        let gravity = createVector(0, 0.2);
+        let weigth = p5.Vector.mult(gravity, mover.mass);   
+        mover.applyForce(weigth);
+        mover.friction();
+        
+        mover.update();
+        mover.edges();
+        mover.show();
     }
-
-    let gravity = createVector(0, 0.2);
-
-    let weigthA = p5.Vector.mult(gravity, moverA.mass);
-    let weigthB = p5.Vector.mult(gravity, moverB.mass);    
-    moverA.applyForce(weigthA);
-    moverB.applyForce(weigthB);
-    
-    moverA.update();
-    moverA.edges();
-    moverA.show();
-
-    moverB.update();
-    moverB.edges();
-    moverB.show();
 }
