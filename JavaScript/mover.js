@@ -1,26 +1,35 @@
 class Mover {
     constructor(x, y, m) {
         this.pos = createVector(x, y);
-        this.vel = createVector(0, 0);
+        this.vel = p5.Vector.random2D();
+        this.vel.mult(5);
         this.acc = createVector(0, 0);
         this.mass = m;
         this.r = sqrt(this.mass) * 10;
     }
 
+    drag(c) {
+        let drag = this.vel.copy();
+        drag.normalize();
+        drag.mult(-1);
+
+        let speedSq = this.vel.magSq();
+        drag.setMag(c * speedSq);
+
+        this.applyForce(drag);
+    }
+
     friction() {
         let diff = height - (this.pos.y - this.r);
         if (diff < 1) {
-            this.vel.mult(0.95);
-            /*
+            // this.vel.mult(0.95);
             let friction = this.vel.copy();
             friction.normalize();
             friction.mult(-1);
-
             let mu = 0.1;
             let normal = this.mass;
             friction.setMag(mu * normal);
-
-            this.applyForce(friction);*/
+            this.applyForce(friction);
         }
     }
 
